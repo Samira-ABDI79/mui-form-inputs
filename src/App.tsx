@@ -5,9 +5,11 @@ import { Button, Grid } from '@mui/material';
 import FormTextField from './form-fields/FormTextField';
 import { formDefaultValues } from './form-fields/constants';
 import { useForm } from 'react-hook-form';
+import FormSwitch from './form-fields/FormSwitch';
 
 export interface FormTypes {
   userName: string;
+  active:boolean;
 
 }
 const submitFunc = (data: FormTypes) => {
@@ -28,6 +30,18 @@ function App() {
           control={control}
           variant="outlined"
           label="User Name"
+          rules={{
+            required: true,
+          }}
+        />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+        <FormSwitch
+          name="active"
+          control={control}
+         label='active'
+ 
+    
           rules={{
             required: true,
           }}
