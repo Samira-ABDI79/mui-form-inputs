@@ -7,11 +7,13 @@ import { formDefaultValues, historyStorageOptions } from './form-fields/constant
 import { useForm } from 'react-hook-form';
 import FormSwitch from './form-fields/FormSwitch';
 import FormSelectBox from './form-fields/FormSelectBox';
+import FormDatePicker from './form-fields/FormDatePicker';
 
 export interface FormTypes {
   userName: string;
   active:boolean;
   historyStorage: string;
+  update:string
 
 }
 const submitFunc = (data: FormTypes) => {
@@ -55,6 +57,16 @@ function App() {
               control={control}
               label="historyStorage"
               options={historyStorageOptions}
+              rules={{
+                required: true,
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <FormDatePicker
+              name="update"
+              control={control}
+              label="update"
               rules={{
                 required: true,
               }}
