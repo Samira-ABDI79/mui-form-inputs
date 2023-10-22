@@ -1,6 +1,18 @@
 export const formDefaultValues = {
   userName: '',
-  active:true
+  active:true,
+  historyStorage:'',
 
  
   };
+
+  export const historyStorageOptions = [
+    {
+      label: 'yes',
+      value: 'true',
+    },
+    {
+      label: 'no',
+      value: 'false',
+    },
+  ];

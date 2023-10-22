@@ -3,13 +3,15 @@ import logo from './logo.svg';
 import './App.css';
 import { Button, Grid } from '@mui/material';
 import FormTextField from './form-fields/FormTextField';
-import { formDefaultValues } from './form-fields/constants';
+import { formDefaultValues, historyStorageOptions } from './form-fields/constants';
 import { useForm } from 'react-hook-form';
 import FormSwitch from './form-fields/FormSwitch';
+import FormSelectBox from './form-fields/FormSelectBox';
 
 export interface FormTypes {
   userName: string;
   active:boolean;
+  historyStorage: string;
 
 }
 const submitFunc = (data: FormTypes) => {
@@ -47,6 +49,17 @@ function App() {
           }}
         />
         </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+            <FormSelectBox
+              name="historyStorage"
+              control={control}
+              label="historyStorage"
+              options={historyStorageOptions}
+              rules={{
+                required: true,
+              }}
+            />
+          </Grid>
         <Grid item xs={12} md={4} className="flex justify-end">
             <Button type="submit" size="medium" variant="contained" fullWidth>
          
