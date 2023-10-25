@@ -55,7 +55,7 @@ function FormDatePicker<T extends FieldValues>({
       toolbarFormat="d MMMM yyyy"
       inputFormat="d MMMM yyyy"
       PopperProps={{
-        sx: (theme: any) => ({
+        sx: (theme) => ({
           '& .MuiCalendarPicker-root': {
             button: { fontSize: '14px' },
           },
@@ -64,7 +64,7 @@ function FormDatePicker<T extends FieldValues>({
           },
         }),
       }}
-      onChange={(newValue : any) => {
+      onChange={(newValue) => {
         setInputValue(newValue as unknown as T);
         if (newValue) {
           field.onChange(newValue);
@@ -73,7 +73,7 @@ function FormDatePicker<T extends FieldValues>({
           field.onChange(null);
         }
       }}
-      onAccept={(newValue:any) => {
+      onAccept={(newValue) => {
         if (newValue) {
           if (restOnChange) {
             restOnChange(newValue);

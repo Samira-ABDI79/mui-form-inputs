@@ -1,57 +1,77 @@
-import React from 'react';
-import { Controller, FieldValues } from 'react-hook-form';
-import Switch from '@mui/material/Switch';
-import { Grid, Typography } from '@mui/material';
+import { FieldValues, UseControllerProps, useController } from 'react-hook-form';
+import FormControlLabel, { FormControlLabelProps } from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
 
-interface CustomSwitchProps<T extends FieldValues> {
-  name: string;
+import Switch, { SwitchProps } from '@mui/material/Switch';
+import clsx from 'clsx';
+import { memo, JSX } from 'react';
+import { FormControl } from '@mui/material';
+
+type TSwitchProps = {
   label: string;
-  control: any; // Replace "any" with the appropriate type for your form library
-  dir?: 'rtl' | 'ltr';
-  [key: string]: any;
-}
+  required?: boolean;
+  options?: TSwitchProps;
+  isCheckedhandler?: Function;
+  onChangeInterceptor?: Function;
+  formControlLabelProps?: Omit<FormControlLabelProps, 'control' | 'label'>;
+  onChangeEmit?: Function;
+};
+
+type RhfSwitchProps<T extends FieldValues> = UseControllerProps<T> & SwitchProps & TSwitchProps;
 
 function FormSwitch<T extends FieldValues>({
   name,
-  label,
   control,
-  dir = 'rtl',
-  ...props
-}: CustomSwitchProps<T>) {
+  label,
+  rules,
+  required = false,
+  formControlLabelProps,
+  isCheckedhandler: isCheckedCondition,
+  onChangeInterceptor,
+  onChangeEmit,
+}: RhfSwitchProps<T>) {
+  const {
+    field,
+    fieldState: { error },
+  } = useController({
+    name,
+    control,
+    rules,
+  });
   return (
-    <Controller
-      name={name}
-      control={control}
-      render={({ field: { value, onChange }, fieldState: { error } }) => (
-        <Grid
-          container
-          item
-          spacing={4}
-          dir={dir}
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          className="w-[300px]"
-        >
-          <Grid item xs={8}>
-            <Typography>{label}</Typography>
-          </Grid>
-          <Grid item xs={2}>
+    <FormControl required={required} error={!!error} component="fieldset">
+      <FormGroup>
+        <FormControlLabel
+          {...formControlLabelProps}
+          className={clsx('ml-auto', formControlLabelProps?.className)}
+          control={
             <Switch
-              {...props}
-              checked={value}
-              onChange={(e) => onChange(e.target.checked)}
-       
-             
-        
+              {...field}
+              checked={
+                typeof isCheckedCondition === 'function'
+                  ? isCheckedCondition(field.value)
+                  : field.value
+              }
+              onChange={(_, isChecked) => {
+                if (onChangeInterceptor) {
+                  if (typeof onChangeEmit === 'function') {
+                    onChangeEmit(onChangeInterceptor(isChecked));
+                  }
+                  field.onChange(onChangeInterceptor(isChecked));
+                } else {
+                  if (typeof onChangeEmit === 'function') {
+                    onChangeEmit(isChecked);
+                  }
+                  field.onChange(isChecked);
+                }
+              }}
             />
-          </Grid>
-        </Grid>
-      )}
-    />
+          }
+          label={label}
+        />
+      </FormGroup>
+    </FormControl>
   );
 }
 
-export default React.memo(FormSwitch);
+export default memo(FormSwitch) as <T extends FieldValues>(props: RhfSwitchProps<T>) => JSX.Element;
